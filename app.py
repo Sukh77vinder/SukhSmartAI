@@ -1,7 +1,7 @@
 import streamlit as st
 from openai import OpenAI
 
-st.title("🤖 My Personal AI")
+st.title("SukhSmart AI")
 
 # This asks you for your secret key in the sidebar
 api_key = st.sidebar.text_input("Enter your Google API Key", type="password")
