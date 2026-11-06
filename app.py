@@ -31,7 +31,7 @@ if prompt := st.chat_input("Ask me anything!"):
         with st.chat_message("assistant"):
             # Get the AI's response from Gemini
             response = client.chat.completions.create(
-                model="gemini-2.0-flash", 
+                model="gemini-3.8-flash", 
                 messages=st.session_state.messages,
             )
             reply = response.choices[0].message.content
