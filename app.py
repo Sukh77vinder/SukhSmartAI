@@ -30,14 +30,5 @@ if prompt := st.chat_input("Ask me anything!"):
                 )
             
             # THIS IS THE LINE THAT MUST BE CHANGED
-            chat = client.chats.create(model="gemini-3.8-flash", history=history)
-            response = chat.send_message(prompt)
+            chat = client.chats.create(model="gemini-2.0-flash-lite", history=history)
             
-            with st.chat_message("assistant"):
-                st.markdown(response.text)
-            st.session_state.messages.append({"role": "assistant", "content": response.text})
-            
-        except Exception as e:
-            st.error(f"Error: {str(e)}")
-    else:
-        st.error("Please enter your API key in the sidebar to the left!")
