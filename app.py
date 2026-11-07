@@ -20,10 +20,8 @@ if prompt := st.chat_input("Ask me anything!"):
 
     if api_key:
         try:
-            # Connect to Google
             client = genai.Client(api_key=api_key.strip())
             
-            # Format the history exactly how Google's new SDK requires it
             history = []
             for msg in st.session_state.messages[:-1]:
                 role = "user" if msg["role"] == "user" else "model"
@@ -31,8 +29,8 @@ if prompt := st.chat_input("Ask me anything!"):
                     types.Content(role=role, parts=[types.Part.from_text(text=msg["content"])])
                 )
             
-            # Start the chat
-            chat = client.chats.create(model="gemini-1.5-flash", history=history)
+            # THIS IS THE LINE THAT MUST BE CHANGED
+            chat = client.chats.create(model="gemini-2.0-flash", history=history)
             response = chat.send_message(prompt)
             
             with st.chat_message("assistant"):
