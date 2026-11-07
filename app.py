@@ -1,42 +1,45 @@
 import streamlit as st
-from openai import OpenAI
+from google import genai
+from google.genai import types
 
 st.title("SukhSmart AI")
 
-# This asks you for your secret key in the sidebar
 api_key = st.sidebar.text_input("Enter your Google API Key", type="password")
 
-# This remembers the chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Show past messages
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# The chat input box
 if prompt := st.chat_input("Ask me anything!"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
     if api_key:
-        # Connect to the free Google AI
-        client = OpenAI(
-            api_key=api_key, 
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-        )
-        
-        with st.chat_message("assistant"):
-            # Get the AI's response from Gemini
-            response = client.chat.completions.create(
-                model="gemini-3.8-flash", 
-                messages=st.session_state.messages,
-            )
-            reply = response.choices[0].message.content
-            st.markdown(reply)
+        try:
+            # Connect to Google
+            client = genai.Client(api_key=api_key.strip())
             
-        st.session_state.messages.append({"role": "assistant", "content": reply})
+            # Format the history exactly how Google's new SDK requires it
+            history = []
+            for msg in st.session_state.messages[:-1]:
+                role = "user" if msg["role"] == "user" else "model"
+                history.append(
+                    types.Content(role=role, parts=[types.Part.from_text(text=msg["content"])])
+                )
+            
+            # Start the chat
+            chat = client.chats.create(model="gemini-1.5-flash", history=history)
+            response = chat.send_message(prompt)
+            
+            with st.chat_message("assistant"):
+                st.markdown(response.text)
+            st.session_state.messages.append({"role": "assistant", "content": response.text})
+            
+        except Exception as e:
+            st.error(f"Error: {str(e)}")
     else:
         st.error("Please enter your API key in the sidebar to the left!")
