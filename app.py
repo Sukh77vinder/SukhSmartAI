@@ -30,7 +30,7 @@ if prompt := st.chat_input("Ask me anything!"):
                 )
             
             # THIS IS THE LINE THAT MUST BE CHANGED
-            chat = client.chats.create(model="gemini-2.0-flash", history=history)
+            chat = client.chats.create(model="gemini-3.8-flash", history=history)
             response = chat.send_message(prompt)
             
             with st.chat_message("assistant"):
