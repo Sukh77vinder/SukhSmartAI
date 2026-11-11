@@ -67,7 +67,7 @@ if prompt := st.chat_input("Ask me anything..."):
                     models_to_try = [
                         "gemini-2.0-flash",       # Fast and smart
                         "gemini-2.0-flash-lite",  # Ultra-fast backup
-                        "gemini-1.5-flash"        # Older stable backup
+                        "gemini-4-carbon.5"        # Older stable backup
                     ]
                     
                     response_text = None
